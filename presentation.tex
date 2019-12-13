@@ -1,0 +1,123 @@
+\documentclass{beamer}
+\usepackage{graphicx}
+
+\usetheme{Warsaw}
+\usefonttheme{professionalfonts}
+
+\input{newcommand}
+
+\title{Poincar\'e Embeddings}
+
+\author{Gai Yu}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+
+\frametitle{Objectives}
+
+\begin{itemize}
+\item Word embedding
+\[
+\call (Z) = \sum_{(u, v) \in \cald} \log \frac{\exp (-d(\bmz_u, \bmz_v))}{\sum_{w \in \caln (u, v)} \exp (-d(\bmz_u, \bmz_w))}
+\]
+where
+\[
+\caln (u, v) = \{w | (u, w) \ne \cald\} \cup \{v\}
+\]
+\item Node embedding
+\[
+\call (Z) = \sum_{(u, v) \in \cale} \log \bbp \{(u, v) \in \cale\}
+\]
+where
+\[
+\bbp \{(u, v) \in \cale\} = \frac1{\exp \left(\frac{d(\bmz_u, \bmz_v) - r}t\right) + 1}
+\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Choices of $d(\bmx, \bmy)$}
+
+\begin{itemize}
+\item The Euclidean distance
+\[
+d(\bmx, \bmy) = |\bmx - \bmy|
+\]
+\item The hyperbolic distance
+\[
+d(\bmx, \bmy) = \arcosh \left(1 + \frac{2 |\bmx - \bmy|^2}{(1 - |\bmx|^2) (1 - |\bmy|^2)}\right) \qquad |\bmx|, |\bmy| < 1
+\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Why hyperbolic distance?}
+
+\[
+d(\bmx, \bmy) = \arcosh \left(1 + \frac{2 |\bmx - \bmy|^2}{(1 - |\bmx|^2) (1 - |\bmy|^2)}\right)
+\]
+
+\[
+\arcosh = \log \left(x + \sqrt{x^2 - 1}\right)
+\]
+
+\begin{figure}
+\includegraphics[scale=0.5]{distance}
+\caption{Growth of Poincaré distance \cite{nickel2017poincare}}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Why hyperbolic distance? (continued)}
+
+In $n$-dimensional Euclidean space,
+\[
+V_n = \frac{\pi^{\frac{n}2} r^n}{\Gamma \left(1 + \frac{n}2\right)}
+\]
+
+In $(n + 1)$-dimensional hyperbolic space, an $n$-sphere of radius $r$ is isometric to a Euclidean $n$-sphere of Euclidean radius $R \sinh \frac{r}{R}$.
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Optimization: SGD on Riemannian manifold \cite{bonnabel2013stochastic}}
+
+Update rule:
+\[
+\bmz_{t + 1}
+= \exp_{\bmz_t} \left(-\eta_t \nabla_\bmz^R \call (\bmz)\right)
+= \exp_{\bmz_t} \left(-\eta_t g_\bmz^{-1} \nabla_\bmz^E \call (\bmz)\right)
+\]
+where
+\begin{itemize}
+\item $\exp_\bmz$ is the exponential map at $\bmz$
+\item $\nabla_\bmz^R$ is the Riemannian gradient at $\bmz$
+\item $g_\bmz^{-1}$ is the inverse metric tensor at $\bmz$
+\item $\nabla_\bmz^E$ is the Euclidean gradient at $\bmz$
+\end{itemize}
+
+The hyperbolic distance corresponds to a simple metric tensor
+\[
+g_\bmz = \left(\frac2{1 - |\bmz|^2}\right)^2 I
+\]
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+
+\bibliographystyle{unsrt}
+\bibliography{presentation}
+
+\end{frame}
+
+\end{document}
